@@ -1,0 +1,30 @@
+<#if isRoot>
+	[{
+	"text": "<@s.m "cmsSite.top"/>",
+	"classes": "folder"
+	<#if list?size gt 0>,
+		"expanded": true,
+		"children": [
+		<#list list as bean>
+			{
+			"id": "${bean.id}",
+			"text": "<#if bean.hasChildren>${bean.name}<#else><label><input type='checkbox' name='jobCategory' value='${bean.id}' nodeName='${bean.name}'/>${bean.name} </label></#if>",
+			"classes": "${bean.hasChildren?string('folder', 'file')}",
+			"hasChildren": ${bean.hasChildren?string('true', 'false')}
+			}<#if bean_has_next>,</#if>
+		</#list>
+		]
+	</#if>
+	}]
+	<#else>
+		[
+		<#list list as bean>
+			{
+			"id": "${bean.id}",
+			"text": "<#if bean.hasChildren>${bean.name}<#else><label><input type='checkbox' name='jobCategory' value='${bean.id}'nodeName='${bean.name}'/>${bean.name} </label></#if>",
+			"classes": "${bean.hasChildren?string('folder', 'file')}",
+			"hasChildren": ${bean.hasChildren?string('true', 'false')}
+			}<#if bean_has_next>,</#if>
+		</#list>
+		]
+</#if>

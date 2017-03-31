@@ -3,6 +3,7 @@ package com.jeecms.cms.entity.main.base;
 import com.jeecms.cms.entity.main.IndustryCategory;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -20,7 +21,7 @@ public abstract class BaseTree<T> implements Serializable {
 	private Integer id;
 	private String name;
 	private T parent;
-	private Set<T> chirdren;
+	private Set<T> chirdren=new HashSet<T>();
 	private boolean hasChildren;
 
 

@@ -13,6 +13,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jeecms.cms.entity.main.*;
+import com.jeecms.cms.manager.main.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,25 +31,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jeecms.cms.entity.main.Channel;
-import com.jeecms.cms.entity.main.CmsModel;
-import com.jeecms.cms.entity.main.CmsModelItem;
-import com.jeecms.cms.entity.main.CmsTopic;
-import com.jeecms.cms.entity.main.Content;
-import com.jeecms.cms.entity.main.ContentCheck;
-import com.jeecms.cms.entity.main.ContentExt;
 import com.jeecms.cms.entity.main.ContentRecord.ContentOperateType;
-import com.jeecms.cms.entity.main.ContentTxt;
-import com.jeecms.cms.entity.main.ContentType;
 import com.jeecms.cms.entity.main.Content.ContentStatus;
 import com.jeecms.cms.manager.assist.CmsConfigContentChargeMng;
 import com.jeecms.cms.manager.assist.CmsFileMng;
-import com.jeecms.cms.manager.main.ChannelMng;
-import com.jeecms.cms.manager.main.CmsModelItemMng;
-import com.jeecms.cms.manager.main.CmsModelMng;
-import com.jeecms.cms.manager.main.CmsTopicMng;
-import com.jeecms.cms.manager.main.ContentMng;
-import com.jeecms.cms.manager.main.ContentTypeMng;
 import com.jeecms.cms.service.ImageSvc;
 import com.jeecms.cms.staticpage.ContentStatusChangeThread;
 import com.jeecms.cms.staticpage.exception.ContentNotCheckedException;
@@ -158,6 +145,29 @@ public class ContentAct{
 		tree(root, request, response, model);
 		return "content/tree_channels";
 	}
+	@RequiresPermissions("content:v_tree_channels")
+	@RequestMapping(value = "/content/v_jobcategory_tree.do")
+	public String selectParent(String root, HttpServletRequest request,
+							   HttpServletResponse response, ModelMap model) {
+		log.debug("tree path={}", root);
+		boolean isRoot;
+		// jquery treeview的根请求为root=source
+		if (StringUtils.isBlank(root) || "source".equals(root)) {
+			isRoot = true;
+		} else {
+			isRoot = false;
+		}
+		model.addAttribute("isRoot", isRoot);
+		List<JobCategory> jobCategoryList;
+		jobCategoryList= jobCategoryMng.getList(root);
+
+		model.addAttribute("list", jobCategoryList);
+		response.setHeader("Cache-Control", "no-cache");
+		response.setContentType("text/json;charset=UTF-8");
+		return "content/jobcategory_tree";
+	}
+
+
 
 	@RequiresPermissions("content:v_list")
 	@RequestMapping("/content/v_list.do")
@@ -1650,5 +1660,7 @@ public class ContentAct{
 	@Autowired
 	private CmsConfigMng cmsConfigMng;
 	@Autowired
-	private CmsConfigContentChargeMng cmsConfigContentChargeMng; 
+	private CmsConfigContentChargeMng cmsConfigContentChargeMng;
+	@Autowired
+	private JobCategoryMng jobCategoryMng;
 }

@@ -109,10 +109,36 @@ $(function() {
 			}
 		}
 	});
+    //职位类别对话框
+    $("#jobCategoryDialog").dialog({
+        autoOpen: false,
+        modal: true,
+        width: 280,
+        height: 400,
+        position: ["center",20],
+        buttons: {
+            "OK": function() {
+                $("#jobCategorySelector input[name='jobCategory']:checked").each(function(){
+                    appendJobCategory(this);
+                    $(this).removeAttr("checked");
+                });
+                $(this).dialog("close");
+            }
+        }
+    });
+
+    $('#jobCategoryLink').click(function(){
+        $('#jobCategoryDialog').dialog('open');
+        return false;
+    });
+
 	$('#channelsLink').click(function(){
 		$('#channelsDialog').dialog('open');
 		return false;
-	});	
+	});
+    $("#jobCategorySelector").treeview({
+        url: "v_jobcategory_tree.do"
+    });
 	$("#channelsSelector").treeview({
 		url: "v_tree_channels.do"
 	});
@@ -149,6 +175,32 @@ function appendChannels(channel) {
 	s += "</div>";
 	$("#channelsContainer").append(s);
 }
+
+function appendJobCategory(jobCategory) {
+    var hasContain = false;
+    $("input[name=jobCategoryIds]").each(function() {
+        if($(this).val()==$(jobCategory).val()) {
+            hasContain = true;
+        }
+    });
+    if(hasContain) {
+        return;
+    }
+//    var nodeList = eval($(jobCategory).attr("nodeName"));
+    //    for(var i=0,len=nodeList.length;i<len;i++) {
+//        s += nodeList[i];
+//        if(i<len-1) {
+//            s += " > ";
+//        }
+//    }
+    var s = "<div style='padding-top:3px'>";
+    var nodeName = $(jobCategory).attr("nodeName");
+	s+=nodeName;
+    s += " <a href='javascript:void(0);' onclick='$(this).parent().remove();' class='pn-opt'><@s.m "global.delete"/></a>";
+    s += "<input type='hidden' name='jobCategoryIds' value='"+$(jobCategory).val()+"'/>";
+    s += "</div>";
+    $("#jobCategoryContainer").append(s);
+}
 function generateTags(){
 	$.post("o_generateTags.do", {
 		title:$("input[name='title']").val()
@@ -179,7 +231,7 @@ window.onload=function() {
 			cancelButtonId : "btnCancel"
 		},
 		debug: false,
-		
+
 		button_image_url : "${base}/res/common/img/theme/menu_search.jpg",
 		button_placeholder_id : "spanButtonPlaceHolder",
 		button_text: "<span class='btnText'><@s.m "content.pictures.upload"/></span>",
@@ -188,7 +240,7 @@ window.onload=function() {
 		button_text_top_padding: 2,
 		button_text_left_padding: 0,
 		button_text_style: '.btnText{color:#666666;}',
-		
+
 		file_queued_handler : fileQueued,
 		file_queue_error_handler : fileQueueError,
 		file_dialog_complete_handler : fileDialogComplete,
@@ -212,7 +264,7 @@ window.onload=function() {
 			cancelButtonId : "abtnCancel"
 		},
 		debug: false,
-		
+
 		button_image_url : "${base}/res/common/img/theme/menu_search.jpg",
 		button_placeholder_id : "aspanButtonPlaceHolder",
 		button_text: "<span class='btnText'><@s.m "content.pictures.upload"/></span>",
@@ -221,7 +273,7 @@ window.onload=function() {
 		button_text_top_padding: 2,
 		button_text_left_padding: 0,
 		button_text_style: '.btnText{color:#666666;}',
-		
+
 		file_queued_handler : fileQueued,
 		file_queue_error_handler : fileQueueError,
 		file_dialog_complete_handler : fileDialogComplete,
@@ -234,7 +286,7 @@ window.onload=function() {
 	</#if>
 };
 function uploadPicsSuccess(file,data) {
-	var jsonData=eval("("+data+")");//转换为json对象 
+	var jsonData=eval("("+data+")");//转换为json对象
 	if(jsonData.error!=null){
 		$.alert("<@s.m 'global.prompt'/>",jsonData.error);
 	}else{
@@ -251,13 +303,13 @@ function uploadPicsSuccess(file,data) {
 	}
 }
 function uploadAttachSuccess(file,data) {
-	var jsonData=eval("("+data+")");//转换为json对象 
+	var jsonData=eval("("+data+")");//转换为json对象
 	if(jsonData.error!=null){
 		$.alert("<@s.m 'global.prompt'/>",jsonData.error);
 	}else{
 		addAttachLine();
 		var index = attachIndex - 1;
-		
+
 		var attachUrl=jsonData.attachUrl;
 		var attachName=jsonData.attachName;
 		$("#attachmentPaths"+index).val(attachUrl);
@@ -389,7 +441,7 @@ function setMediaType(ext){
 	</#if>
 </#list>
 </#if>
-</select> <input class="vice-channel" id="channelsLink" type="button" value="<@s.m "content.channels"/>"/>
+</select><input class="vice-channel" id="channelsLink" type="button" value="<@s.m "content.channels"/>"/>
 <span class="pn-fhelp">${h}</span>
 </div>
 <div><label for="channelId" class="error" generated="true"></label></div>
@@ -403,6 +455,22 @@ function setMediaType(ext){
 </div>
 <div style="clear:both"></div>
 </@p.td>
+
+
+	<#elseif item.field=="jobCategory">
+		<#assign h><#if item.help??>${item.help}<#else>help</#if></#assign>
+		<@p.td required="true" label=item.label colspan=item.single?string("2","1") width="${item.single?string(100,50)}">
+		<div style="float:left;">
+			<div>
+				<input class="vice-channel" id="jobCategoryLink" type="button" value="<@s.m "content.channels"/>"/>
+				<span class="pn-fhelp">${h}</span>
+			</div>
+			<div><label for="channelId" class="error" generated="true"></label></div>
+			<div id="jobCategoryContainer"></div>
+		</div>
+
+	</@p.td>
+
 
 <#elseif item.field=="title">
 <@p.td required="true" help=item.help helpPosition="${item.helpPosition!2}" label=item.label colspan=item.single?string("2","1") width="${item.single?string(100,50)}">
@@ -480,12 +548,12 @@ function setMediaType(ext){
 <@p.td id="typeImg" label=item.label colspan="1" width="50" noHeight="true">
 <@p.text id="uploadImgPath0" name="typeImg" style="width:220px"/> <input type="button" value="<@s.m "imageupload.preview"/>" onclick="previewImg(0);" class="preview-button"/><br/>
 <span id="ufc0" style="position:relative">
-<input type='text' id='uploadFileText0' size="14"/>  
+<input type='text' id='uploadFileText0' size="14"/>
 <input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 <input onchange="$('#uploadFileText0').val(this.value)" size="14" type="file" id="uploadFile0" class="file-button"/>
 </span>
 <label><input type="checkbox" onclick="$('#mark0').val(this.checked);"/><@s.m "imageupload.mark"/></label><input type="hidden" id="mark0" value="false"/> <input type="button" value="<@s.m "imageupload.upload"/>" onclick="upload(0);" class="upload-button"/><br/>
-<@s.m "global.width"/>: <input type="text" id="zoomWidth0" value="${typeList[0].imgWidth}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeight0" value="${typeList[0].imgHeight}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(0);" class="cut-button"/> 
+<@s.m "global.width"/>: <input type="text" id="zoomWidth0" value="${typeList[0].imgWidth}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeight0" value="${typeList[0].imgHeight}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(0);" class="cut-button"/>
 </@p.td><@p.td colspan="1" width="50">
 <img id="preImg0" alt="<@s.m "imageupload.preview"/>" noResize="true"  style="width:100px;height:70px;background-color:#ccc;border:1px solid #333"/>
 </@p.td>
@@ -494,12 +562,12 @@ function setMediaType(ext){
 <@p.td id="titleImg" label=item.label colspan="1" width="50" noHeight="true">
 <@p.text id="uploadImgPath1" name="titleImg" style="width:220px"/> <input type="button" value="<@s.m "imageupload.preview"/>" onclick="previewImg(1);" class="preview-button"/><br/>
 <span id="ufc1" style="position:relative">
-<input type='text' id='uploadFileText1' size="14"/>  
+<input type='text' id='uploadFileText1' size="14"/>
 <input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 <input onchange="$('#uploadFileText1').val(this.value)" size="14" type="file" id="uploadFile1" class="file-button"/>
 </span>
 <label><input type="checkbox" onclick="$('#mark1').val(this.checked);"/><@s.m "imageupload.mark"/></label><input type="hidden" id="mark1" value="false"/> <input type="button" value="<@s.m "imageupload.upload"/>" onclick="upload(1);" class="upload-button"/><br/>
-<@s.m "global.width"/>: <input type="text" id="zoomWidth1" value="${(channel.titleImgWidth)!}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeight1" value="${(channel.titleImgHeight)!}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(1);" class="cut-button"/> 
+<@s.m "global.width"/>: <input type="text" id="zoomWidth1" value="${(channel.titleImgWidth)!}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeight1" value="${(channel.titleImgHeight)!}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(1);" class="cut-button"/>
 </@p.td><@p.td colspan="1" width="50">
 <img id="preImg1" alt="<@s.m "imageupload.preview"/>" noResize="true"  style="width:100px;height:70px;background-color:#ccc;border:1px solid #333"/>
 </@p.td>
@@ -508,12 +576,12 @@ function setMediaType(ext){
 <@p.td id="contentImg" label=item.label colspan="1" width="50" noHeight="true">
 <@p.text id="uploadImgPath2" name="contentImg" style="width:220px"/> <input type="button" value="<@s.m "imageupload.preview"/>" onclick="previewImg(2);" class="preview-button"/><br/>
 <span id="ufc2" style="position:relative">
-<input type='text' id='uploadFileText2' size="14"/>  
+<input type='text' id='uploadFileText2' size="14"/>
 <input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 <input onchange="$('#uploadFileText2').val(this.value)" size="14" type="file" id="uploadFile2" class="file-button"/>
 </span>
 <label><input type="checkbox" onclick="$('#mark2').val(this.checked);"/><@s.m "imageupload.mark"/></label><input type="hidden" id="mark2" value="false"/> <input type="button" value="<@s.m "imageupload.upload"/>" onclick="upload(2);" class="upload-button"/><br/>
-<@s.m "global.width"/>: <input type="text" id="zoomWidth2" value="${(channel.contentImgWidth)!}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeight2" value="${(channel.contentImgWidth)!}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(2);" class="cut-button"/> 
+<@s.m "global.width"/>: <input type="text" id="zoomWidth2" value="${(channel.contentImgWidth)!}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeight2" value="${(channel.contentImgWidth)!}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(2);" class="cut-button"/>
 </@p.td><@p.td colspan="1" width="50">
 <img id="preImg2" alt="<@s.m "imageupload.preview"/>" noResize="true" style="width:100px;height:70px;background-color:#ccc;border:1px solid #333"/>
 </@p.td>
@@ -540,7 +608,7 @@ function setMediaType(ext){
 	<td align="center"><input type="text" id="attachmentPaths{0}" name="attachmentPaths"/></td>
 	<td align="center">
 		<span id="afc{0}" style="position:relative;display:block;width:300px;*width:300px;">
-		<input type='text' id='attachmentText{0}'/>  
+		<input type='text' id='attachmentText{0}'/>
 		<input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 		<input onchange="$('#attachmentText{0}').val(this.value)" size="19" type="file" name="attachmentFile" id="attachmentFile{0}" style="height:24px;opacity:0;filter:alpha(opacity=0);position:absolute;right:69px;top:2px;"/>
 		<input type="button" value="<@s.m "content.fileUpload"/>" onclick="uploadAttachment({0});" class="upload-button"/>
@@ -560,17 +628,17 @@ function addAttachLine() {
 
 <#elseif item.field=="media">
 <@p.td label=item.label colspan="1" width="50" noHeight="true">
-<!-- 
+<!--
 <div>
 	<input type="text" id="mediaPath" name="mediaPath" style="width:265px"/>
 </div>
 <div>
 	<span id="mfc" style="position:relative;display:block;width:300px;*width:300px;">
-	<input type='text' id='mediaFileText'/>  
+	<input type='text' id='mediaFileText'/>
 	<input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 	<input onchange="$('#mediaFileText').val(this.value)" size="19" type="file" name="mediaFile" id="mediaFile" style="height:24px;opacity:0;filter:alpha(opacity=0);position:absolute;right:79px;top:2px;"/>
 	<input type="button" value="<@s.m "imageupload.upload"/>" onclick="uploadMedia();" class="upload-button"/>
-	</span> 
+	</span>
 </div>
  -->
 <input type="text" id="mediaPath" name="mediaPath" style="width:150px"/>
@@ -625,12 +693,12 @@ $(function () {
 <@p.td colspan="1" width="50" label="content.weixinImg">
 <@p.text id="uploadImgPath4" name="weixinImg" style="width:220px"/> <input type="button" value="<@s.m "imageupload.preview"/>" onclick="previewImg(4);" class="preview-button"/><br/>
 <span id="ufc4" style="position:relative">
-<input type='text' id='uploadFileText4' size="14"/>  
+<input type='text' id='uploadFileText4' size="14"/>
 <input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 <input onchange="$('#uploadFileText4').val(this.value)" size="14" type="file" id="uploadFile4" class="file-button"/>
 </span>
 <label><input type="checkbox" onclick="$('#mark4').val(this.checked);"/><@s.m "imageupload.mark"/></label><input type="hidden" id="mark4" value="false"/> <input type="button" value="<@s.m "imageupload.upload"/>" onclick="upload(4);" class="upload-button"/><br/>
-<@s.m "global.width"/>: <input type="text" id="zoomWidth4" value="${(channel.titleImgWidth)!}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeightweixin" value="${(channel.titleImgHeight)!}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(4);" class="cut-button"/> 
+<@s.m "global.width"/>: <input type="text" id="zoomWidth4" value="${(channel.titleImgWidth)!}" size="5"/> <@s.m "global.height"/>: <input type="text" id="zoomHeightweixin" value="${(channel.titleImgHeight)!}" size="5"/> <input type="button" value="<@s.m "imageupload.cut"/>" onclick="imgCut(4);" class="cut-button"/>
 </@p.td>
 <@p.td colspan="1" width="50">
 <img id="preImg4" alt="<@s.m "imageupload.preview"/>" style="width:100px;height:70px;background-color:#ccc;border:1px solid #333"/>
@@ -661,7 +729,7 @@ $(function () {
 		<div><input type="text" id="uploadImgPath{0}" name="picPaths" style="width:160px"/> <a href="javascript:void(0);" onclick="$('#picTable{0}').remove();" class="pn-opt"><@s.m "content.picturesDel"/></a></div>
 		<div>
 		<span id="ufc{0}" style="position:relative">
-		<input type='text' id='uploadFileText{0}' size="10"/>  
+		<input type='text' id='uploadFileText{0}' size="10"/>
 		<input class="browse" type='button' value='<@s.m "global.browse"/>'/>
 		<input onchange="$('#uploadFileText{0}').val(this.value)" size="10" type="file" id="uploadFile{0}" class="file-button"/>
 		</span>
@@ -719,6 +787,9 @@ function addPicLine() {
 <#include "/common/alert_message.html"/>
 <div id="channelsDialog" title="<@s.m "content.selectChannels"/>" style="display:none;">
 <ul id="channelsSelector" class="filetree"></ul>
+
+<div id="jobCategoryDialog" title="选择职业类别" style="display:none;">
+<ul id="jobCategorySelector" class="filetree"></ul>
 </div>
 </body>
 </html>
