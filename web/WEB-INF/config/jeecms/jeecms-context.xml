@@ -175,6 +175,8 @@
 	<bean id="apiAccountMng" class="com.jeecms.cms.manager.main.impl.ApiAccountMngImpl"/>
 	<bean id="apiRecordMng" class="com.jeecms.cms.manager.main.impl.ApiRecordMngImpl"/>
 	<bean id="apiUserLoginMng" class="com.jeecms.cms.manager.main.impl.ApiUserLoginMngImpl"/>
+	<bean id="jobCategoryMng" class="com.jeecms.cms.manager.main.impl.JobCategoryMngImpl"/>
+	<bean id="industryCategoryMng" class="com.jeecms.cms.manager.main.impl.IndustryCategoryMngImpl"/>
 	<!--DAO-->
 	<bean id="channelDao" class="com.jeecms.cms.dao.main.impl.ChannelDaoImpl"/>
 	<bean id="channelExtDao" class="com.jeecms.cms.dao.main.impl.ChannelExtDaoImpl"/>
@@ -272,4 +274,6 @@
 	<bean id="apiAccountDao" class="com.jeecms.cms.dao.main.impl.ApiAccountDaoImpl"/>
 	<bean id="apiRecordDao" class="com.jeecms.cms.dao.main.impl.ApiRecordDaoImpl"/>
 	<bean id="apiUserLoginDao" class="com.jeecms.cms.dao.main.impl.ApiUserLoginDaoImpl"/>
+	<bean id="jobCategoryDao" class="com.jeecms.cms.dao.main.impl.JobCategoryDaoImpl"/>
+	<bean id="industryCategoryDao" class="com.jeecms.cms.dao.main.impl.IndustryCategoryDaoImpl"/>
 </beans>

@@ -1,0 +1,30 @@
+<#if isRoot>
+[{
+	"text": "<a href='v_list.do' target='siteRightFrame'><@s.m "cmsSite.top"/></a>",
+	"classes": "folder"
+	<#if list?size gt 0>,
+	"expanded": true,
+	"children": [
+	<#list list as bean>
+		{
+		"id": "${bean.id}",
+		"text": "<a href='v_list.do?root=${bean.id}' target='siteRightFrame'>${bean.name}</a>",
+		"classes": "${bean.hasChildren?string('folder', 'file')}",
+		"hasChildren": ${bean.hasChildren?string('true', 'false')}
+		}<#if bean_has_next>,</#if>
+	</#list>
+	]
+	</#if>
+}]
+<#else>
+	[
+	<#list list as bean>
+		{
+		"id": "${bean.id}",
+		"text": "<a href='v_list.do?root=${bean.id}' target='siteRightFrame'>${bean.name}</a>",
+		"classes": "${bean.hasChildren?string('folder', 'file')}",
+		"hasChildren": ${bean.hasChildren?string('true', 'false')}
+		}<#if bean_has_next>,</#if>
+	</#list>
+	]
+</#if>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>JEECMS Administrator's Control Panel</title>
+<title>Administrator's Control Panel</title>
 <#include "/jeecms_sys/head.html"/>
 <script type="text/javascript">
 if(top!=this) {
@@ -25,8 +25,8 @@ body{background:url(${base}/res/jeecms/img/login/bg.jpg) left top repeat-x;}
   <div class="login-index-box">
       <div class="login-logo"><img src="${base}/res/jeecms/images/login-logo.jpg"></div>
       <div class="login-text">
-        <div class="username-con"><i></i><input type="text" id="username" name="username" vld="{required:true}" maxlength="100" class="username" placeholder="<@s.m "login.username"/>" /></div>
-        <div class="password-con"><i></i><input type="password" id="password" name="password" maxlength="32" vld="{required:true}" class="password" placeholder="<@s.m "login.password"/>" /></div>
+        <div class="username-con"><i></i><input type="text" id="username" name="username" vld="{required:true}" maxlength="100" class="username" value="admin" placeholder="<@s.m "login.username"/>" /></div>
+        <div class="password-con"><i></i><input type="password" id="password" name="password" maxlength="32" vld="{required:true}" class="password" value="siuloongT000" placeholder="<@s.m "login.password"/>" /></div>
         <#if (errorTimes??&&errorTimes<=0)||(errorRemaining?? && errorRemaining<=0)>
         <div class="login-captcha"><i></i>
           <input name="captcha" type="text" id="captcha" vld="{required:true}" class="captcha" placeholder="<@s.m "login.captcha"/>" />
@@ -35,8 +35,8 @@ body{background:url(${base}/res/jeecms/img/login/bg.jpg) left top repeat-x;}
         </#if>
       </div>
       <div class="login-submit" style="border:none;"><input type="submit" name="submit" value="" style="border:0px none;" /></div>
-      <div style="height:0; clear:both;"></div> 		
-      <#if error??> 
+      <div style="height:0; clear:both;"></div>
+      <#if error??>
       <div class="login-error">
 		<ul>
 		  <#if error=="org.apache.shiro.authc.IncorrectCredentialsException">
@@ -48,10 +48,10 @@ body{background:url(${base}/res/jeecms/img/login/bg.jpg) left top repeat-x;}
 		  <#elseif error=="com.jeecms.common.security.DisabledException">
 		  <li><img src="${base}/res/jeecms/images/error-icon.png"><@s.m "error.userDisabled"/></li>
  		  </#if>
-	    </ul>				
+	    </ul>
       </div>
       </#if>
-    
+
     </div>
 </div>
 </form>

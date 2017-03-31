@@ -145,7 +145,15 @@ $(function() {
 		</@cms_perm>	
 		<@cms_perm url="/ftp/v_list.do">
 		<li><a href="../ftp/v_list.do" target="rightFrame"><@s.m "ftp.function"/></a></li>
-		</@cms_perm>     
+		</@cms_perm>
+
+		<!--add by me-->
+		<@cms_perm url="/jobCategory/jobCategory_main.do">
+		<li><a href="../jobCategory/jobCategory_main.do" target="rightFrame"><@s.m "tgJobCategory.function"/></a></li>
+		</@cms_perm>
+		<@cms_perm url="/industryCategory/industryCategory_main.do">
+		<li><a href="../industryCategory/industryCategory_main.do" target="rightFrame"><@s.m "tgIndustryCategory.function"/></a></li>
+		</@cms_perm>
       </ol>
     </div>
 </div>

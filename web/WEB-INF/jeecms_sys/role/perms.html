@@ -7,6 +7,8 @@
 	<#assign tc="template:template_main,template:v_left,template:v_tree,template:v_list"/>
 	<#assign rc="resource:resource_main,resource:v_left,resource:v_tree,resource:v_list"/>
 	<#assign ssc="site:site_main,site:v_left,site:v_tree,site:v_list,site:v_checkDomain,site:v_checkMaster"/>
+	<#assign jc="jobCategory:jobCategory_main,jobCategory:v_left,jobCategory:v_tree,jobCategory:v_list"/>
+	<#assign icc="industryCategory:industryCategory_main,industryCategory:v_left,industryCategory:v_tree,industryCategory:v_list"/>
 	<#assign static="static"/>
 	<#assign words="words"/>
 	<#assign data="data"/>
@@ -579,7 +581,25 @@
 			{ id:2083, pId:208, name:"<@s.m 'global.edit'/>",perm:"ftp:v_edit,${configc}"},
 			{ id:2084, pId:208, name:"<@s.m 'global.update'/>",perm:"ftp:o_update,${configc}"},
 			{ id:2085, pId:208, name:"<@s.m 'global.delete'/>",perm:"ftp:o_delete,${configc}"},
-			];
+
+
+
+			{ id:209, pId:20, name:"<@s.m 'tgJobCategory.function'/>"},
+			{ id:2090, pId:209, name:"<@s.m 'global.add'/>",perm:"jobCategory:v_add,${jc},${configc}"},
+			{ id:2091, pId:209, name:"<@s.m 'global.save'/>",perm:"jobCategory:o_save,${jc},${configc}"},
+			{ id:2092, pId:209, name:"<@s.m 'global.edit'/>",perm:"jobCategory:v_edit,${jc},${configc}"},
+			{ id:2093, pId:209, name:"<@s.m 'global.update'/>",perm:"jobCategory:o_update,${jc},${configc}"},
+			{ id:2094, pId:209, name:"<@s.m 'global.delete'/>",perm:"jobCategory:o_delete,${jc},${configc}"},
+
+			{ id:210, pId:20, name:"<@s.m 'tgIndustryCategory.function'/>"},
+			{ id:2100, pId:210, name:"<@s.m 'global.add'/>",perm:"industryCategory:v_add,${icc},${configc}"},
+			{ id:2101, pId:210, name:"<@s.m 'global.save'/>",perm:"industryCategory:o_save,${icc},${configc}"},
+			{ id:2102, pId:210, name:"<@s.m 'global.edit'/>",perm:"industryCategory:v_edit,${icc},${configc}"},
+			{ id:2103, pId:210, name:"<@s.m 'global.update'/>",perm:"industryCategory:o_update,${icc},${configc}"},
+			{ id:2104, pId:210, name:"<@s.m 'global.delete'/>",perm:"industryCategory:o_delete,${icc},${configc}"},
+
+
+        ];
 		$(document).ready(function(){
 			ztree =$.fn.zTree.init($("#tree"), setting, zNodes);
 		});

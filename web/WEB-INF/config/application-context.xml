@@ -73,6 +73,7 @@ default-lazy-init="true">
             
 			hibernate.cache.use_query_cache=true
 			hibernate.cache.use_second_level_cache=true
+				hibernate.hbm2ddl.auto=update
            </value>
 		</property>
 		<property name="cacheRegionFactory">   

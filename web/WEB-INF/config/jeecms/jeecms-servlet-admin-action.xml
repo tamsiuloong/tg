@@ -102,4 +102,6 @@
 	<bean id="apiAccountAct" class="com.jeecms.cms.action.admin.main.ApiAccountAct"/>
 	<bean id="apiRecordAct" class="com.jeecms.cms.action.admin.main.ApiRecordAct"/>
 	<bean id="apiUserLoginAct" class="com.jeecms.cms.action.admin.main.ApiUserLoginAct"/>
+	<bean id="jobCategoryAct" class="com.jeecms.cms.action.admin.main.JobCategoryAct"/>
+	<bean id="industryCategoryAct" class="com.jeecms.cms.action.admin.main.IndustryCategoryAct"/>
 </beans>
